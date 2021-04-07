@@ -28,8 +28,8 @@ public class Role {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "roles_authorities",
-            joinColumns = @JoinColumn(name = "role_id"),//role
-            inverseJoinColumns = @JoinColumn(name = "authority_id")//authority
+            joinColumns = @JoinColumn(name = "role_id"), //role
+            inverseJoinColumns = @JoinColumn(name = "authority_id") //authority
     )
     private Set<Authority> authorities = new HashSet<>();
 
