@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
 
     @Id
@@ -37,9 +37,9 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private List<Product> products;
+//    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id")
+//    private List<Restaurant> restaurants;
 
     public Set<GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> grantedAuthorities = role.getAuthorities().stream()
