@@ -1,6 +1,7 @@
 package com.example.lfd1back.service;
 
 import com.example.lfd1back.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

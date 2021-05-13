@@ -1,6 +1,7 @@
 package com.example.lfd1back.config;
 
 import com.example.lfd1back.model.User;
+import com.example.lfd1back.repository.UserRepository;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,12 @@ import javax.servlet.http.HttpSession;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
-//    private final UserRepo userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public SecurityConfig(@Qualifier("myUserDetailsService") UserDetailsService userDetailsService) {
+    public SecurityConfig(@Qualifier("myUserDetailsService") UserDetailsService userDetailsService, UserRepository userRepository) {
         this.userDetailsService = userDetailsService;
+        this.userRepository = userRepository;
     }
 
     @Bean
@@ -84,14 +86,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return ((httpServletRequest, httpServletResponse, authentication) -> {
             //get user from DB
             String email = httpServletRequest.getParameter("email");
-//            String password = request.getParameter("password");
-//            User user = userRepository.findByEmail(email);
+            String password = httpServletRequest.getParameter("password");
+            User user = userRepository.findByEmail(email);
 
             HttpSession session = httpServletRequest.getSession();
             session.setMaxInactiveInterval(60 * 10); //5 minutes
-//            session.setAttribute("user", user);
+            session.setAttribute("user", user);
 
-//            user.getAuthorities().forEach(System.out::println);
+            user.getAuthorities().forEach(System.out::println);
 
             httpServletResponse.sendRedirect("/"); //go to main page
         });

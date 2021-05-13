@@ -6,11 +6,13 @@ import com.example.lfd1back.repository.UserRepository;
 import com.example.lfd1back.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Service
 public class UserService implements IUserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;

@@ -1,10 +1,7 @@
 package com.example.lfd1back.model;
 
 import com.example.lfd1back.model.security.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -14,8 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -40,6 +36,8 @@ public class User {
 //    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 //    @JoinColumn(name = "user_id")
 //    private List<Restaurant> restaurants;
+
+    private String cartNum;
 
     public Set<GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> grantedAuthorities = role.getAuthorities().stream()
