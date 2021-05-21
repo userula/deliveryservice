@@ -7,8 +7,8 @@ import java.util.List;
 public interface IUserService {
     User findByEmail(String email);
     List<User> getAll();
-    boolean deleteById(Long id);
     User findById(Long id);
+    boolean deleteById(Long id);
     boolean save(User user);
     boolean changePassword(String oldPassword, String newPassword, User u);
 }

@@ -1,6 +1,7 @@
 package com.example.lfd1back.controller;
 
 import com.example.lfd1back.model.User;
+import com.example.lfd1back.service.interfaces.IDeliveryService;
 import com.example.lfd1back.service.interfaces.IUserService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,8 +23,14 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private IDeliveryService deliveryService;
+
+    @Autowired
+    private
+
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody User user){
+    ResponseEntity<?> signup(@RequestBody User user){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
@@ -39,5 +46,10 @@ public class UserController {
             return ResponseEntity.ok("User doesn't exist!");
         }
         return ResponseEntity.ok(validated);
+    }
+
+    @PostMapping("/delivery")
+    public ResponseEntity<?> choosedelivery(){
+        return ResponseEntity.ok(deliveryService.getFreeDel());
     }
 }
