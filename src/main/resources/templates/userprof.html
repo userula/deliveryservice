@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark justify-content-between" style="position: fixed; width: 100%; z-index: +1;">
+    <div>
+        <a class="navbar-brand" href="#main">Delivery Service</a>
+        <a class="navbar-brand" href="localhost:8080/userProf"><span class="glyphicon glyphicon-btc"></span></a>
+    </div>
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <div>
+        <a class="btn btn-warning" href="/cart/getAllDishesFromCart">Cart</a>
+<!--        <a class="btn btn-warning" href="#transferblock">Transfer</a>-->
+    </div>
+    <div class="d-flex">
+        <form action="/userConf" method="get">
+            <button class="btn btn-info" th:text="${session.user.email}"><span class="glyphicon glyphicon-user"></span></button>
+        </form>
+        <form action="/logout" method="post">
+            <button class="btn btn-danger my-2 my-sm-0" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+<br><br><br>
+
+<style type="text/css">
+    .list {
+        margin: 20px;
+    }
+
+    .list .container {
+        box-shadow: 0 0 20px;
+        padding: 50px;
+        background-color: white;
+    }
+    .list .col-md-4{
+        opacity: 1;
+        transition: .5s;
+        transform: scale(.9);
+        position: relative;
+    }
+    .row{
+        margin-top: 10px;
+    }
+    .list .col-md-4:hover{
+        opacity: 1;
+        transform: scale(1);
+    }
+    .col-md-4{
+        border-radius: 9999em;
+    }
+</style>
+
+<div class="list" id="main">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <h2 th:text="${session.user.email}"></h2>
+                <button id="createaccbtn" class="btn btn-info btn-outline-warning">Create form</button>
+                <!--                <button id="" class="btn btn-">Create form</button>-->
+                <hr>
+                <div th:if="${param.createsuccess}">
+                    <div class="alert alert-info">You've successfully added a new account!!!</div>
+                </div>
+
+                <div class="col-md-5 border border-success createacc" style="display: none;">
+                    <form action="/createAccount" method="post">
+                        <div class="m-5">
+                            <input type="text" name="dishName" required placeholder="Enter dish name">
+                            <hr>
+                            <input type="text" name="dishPrice" required placeholder="Enter dish price">
+                            <h4></h4><br>
+                            <button class="btn btn-success" type="submit">Generate new Account</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="col-md-4 border border-success" th:each="pr, iter:${dishes}">
+                <div class="m-5 p-3">
+                    <h3><strong th:text="${pr.id} + '-' + ${pr.name}"></strong></h3>
+
+                    <hr>
+                    <h4 th:text="${pr.price}"></h4><br>
+
+                    <button class="btn btn-info addtocart" th:id="${pr.id}">Add to cart</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<br>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $(".addtocart").on("click", function (){
+            event.preventDefault();
+            var a = $( this ).attr("id");
+            var url = "http://localhost:8080/cart/addtocart";
+            var msgg = "msg" + a;
+
+            $.ajax({
+                url: url,
+                type: 'GET',  // http method
+                data: 'id=' + a,
+                accepts: 'application/json; charset=utf-8',
+                //contentType: "application/json",
+                success: function (data) {
+                    alert("Added");
+                },
+                error: function (errorData, textStatus, errorMessage) {
+                    var msg = (errorData.responseJSON != null) ? errorData.responseJSON.errorMessage : '';
+                    $(msgg).text('Error: ' + msg + ', ' + errorData.status);
+                }
+            });
+        });
+
+    });
+
+
+</script>
+</body>
+</html>

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 @AllArgsConstructor
+@Service
 public class DeliveryService implements IDeliveryService {
 
     @Autowired

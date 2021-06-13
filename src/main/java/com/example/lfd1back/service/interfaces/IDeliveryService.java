@@ -12,5 +12,5 @@ public interface IDeliveryService {
     boolean delete(Deliveryman deliveryman);
     List<Deliveryman> getAll();
     Deliveryman findById(Long id);
-    public List<Deliveryman> getFreeDel();
+    List<Deliveryman> getFreeDel();
 }

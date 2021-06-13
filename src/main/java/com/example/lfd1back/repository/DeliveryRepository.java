@@ -9,6 +9,6 @@ import java.util.List;
 public interface DeliveryRepository extends JpaRepository<Deliveryman, Long> {
 
     @Query(value = "SELECT * FROM deliveryman d WHERE d.isFree = 1", nativeQuery = true)
-    public List<Deliveryman> getFreeDel();
+    List<Deliveryman> getFreeDel();
 
 }

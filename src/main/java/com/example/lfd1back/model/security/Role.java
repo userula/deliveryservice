@@ -17,8 +17,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class Role {
 
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "id")
     private long role_id;
 

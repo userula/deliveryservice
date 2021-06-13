@@ -6,4 +6,5 @@ public interface ICartService {
     boolean save(Cart cart);
     boolean update(Cart cart);
     boolean delete(Cart cart);
+    Cart getCart(Long id);
 }

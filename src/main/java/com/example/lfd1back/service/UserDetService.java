@@ -21,7 +21,9 @@ public class UserDetService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
+        com.example.lfd1back.model.User u = userRepository.findByEmail(s);
+
+        return getAuthenticatedUser(u);
     }
 
     private User getAuthenticatedUser(com.example.lfd1back.model.User user){

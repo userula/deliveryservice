@@ -20,6 +20,7 @@ public class Dish {
 
     private String price;
 
-    private Restaurant restaurant;
+    @Column(name = "restaurantId")
+    private Long restaurant_id;
 
 }

@@ -13,8 +13,9 @@ import javax.persistence.*;
 @Table(name = "restaurant")
 public class Restaurant {
 
-    @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
 
     private String name;

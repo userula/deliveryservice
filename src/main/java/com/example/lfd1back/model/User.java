@@ -37,8 +37,6 @@ public class User {
 //    @JoinColumn(name = "user_id")
 //    private List<Restaurant> restaurants;
 
-    private String cartNum;
-
     public Set<GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> grantedAuthorities = role.getAuthorities().stream()
                 .map(a -> new SimpleGrantedAuthority(a.getName()))

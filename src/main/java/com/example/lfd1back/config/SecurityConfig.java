@@ -3,6 +3,7 @@ package com.example.lfd1back.config;
 import com.example.lfd1back.model.User;
 import com.example.lfd1back.repository.UserRepository;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -61,12 +62,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity security) throws Exception{
         security.csrf().disable().authorizeRequests()
-                .antMatchers().hasAnyRole() //ex
-//                .anyRequest().hasAnyRole()
+//                .antMatchers().hasAnyRole() //ex
+                .antMatchers(HttpMethod.POST, "/login").not().authenticated()
+                .antMatchers("/signup").not().authenticated()
+                .antMatchers(HttpMethod.POST, "/changePass").hasAnyRole("admin", "user")
+                .antMatchers("/userProf").hasAnyRole("admin", "user")
+                .antMatchers("/userConf").hasAnyRole("admin", "user")
+                .anyRequest().authenticated()
 
                 .and()
                 .formLogin()
-                .loginPage("/login") //login page url
+                .loginPage("/login").permitAll() //login page url
                 .usernameParameter("email") //email
                 .passwordParameter("password") //password
                 .successHandler(authenticationSuccessHandler()) //method to success authentication
@@ -86,7 +92,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return ((httpServletRequest, httpServletResponse, authentication) -> {
             //get user from DB
             String email = httpServletRequest.getParameter("email");
-            String password = httpServletRequest.getParameter("password");
+
+            System.out.println(email);
+//            String password = httpServletRequest.getParameter("password");
             User user = userRepository.findByEmail(email);
 
             HttpSession session = httpServletRequest.getSession();
@@ -95,13 +103,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             user.getAuthorities().forEach(System.out::println);
 
-            httpServletResponse.sendRedirect("/"); //go to main page
+            httpServletResponse.sendRedirect("/userprof"); //go to main page
         });
     }
 
     private AuthenticationFailureHandler authenticationFailureHandler() {
         return ((request, response, authentication) -> {
-            response.sendRedirect("/?error"); //go to back with error attribute
+            System.out.println("HEEEY");
+            response.sendRedirect("/login?error"); //go to back with error attribute
         });
     }
 

@@ -5,8 +5,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "authorities")
 public class Authority {
-    @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "id")
     private Long id;
 
@@ -28,5 +29,4 @@ public class Authority {
     public void setName(String name) {
         this.name = name;
     }
-
 }

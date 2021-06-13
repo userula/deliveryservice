@@ -3,6 +3,7 @@ package com.example.lfd1back.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "cart")
@@ -15,8 +16,11 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Dish dish;
+    @ManyToMany()
+    private List<Dish> dishes;
 
-    private User customer;
+    @JoinColumn(name = "user_id")
+    @OneToOne
+    private User user;
 
 }
