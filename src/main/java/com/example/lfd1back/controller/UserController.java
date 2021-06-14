@@ -2,15 +2,10 @@ package com.example.lfd1back.controller;
 
 import com.example.lfd1back.model.Cart;
 import com.example.lfd1back.model.Dish;
+import com.example.lfd1back.model.Restaurant;
 import com.example.lfd1back.model.User;
-import com.example.lfd1back.service.interfaces.ICartService;
-import com.example.lfd1back.service.interfaces.IDeliveryService;
-import com.example.lfd1back.service.interfaces.IDishService;
-import com.example.lfd1back.service.interfaces.IUserService;
+import com.example.lfd1back.service.interfaces.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,6 +38,9 @@ public class UserController {
     @Autowired
     private IDishService dishService;
 
+    @Autowired
+    private IRestaurantService restaurantService;
+
     @RequestMapping("/")
     public String index() {
         return "redirect:/login";
@@ -57,10 +57,17 @@ public class UserController {
         return "signup";
     }
 
+    @RequestMapping("/home")
+    public String home(){
+        return "userprof";
+    }
+
     @PostMapping("/signup")
     public String signup(User user){
 //        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        user.setPassword(encodedPassword);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userService.save(user);
 
         Cart c = new Cart();
@@ -92,8 +99,31 @@ public class UserController {
 
         List<Dish> list =  dishService.getAll();
         model.addAttribute("dishes", list);
+
+        List<Restaurant> reslist = restaurantService.getAll();
+        model.addAttribute("restaurants", reslist);
+
         return "userprof";
     }
 
+    @GetMapping("/userConf")
+    public String userConf(){
+
+        return "changepass";
+    }
+
+    @PostMapping("/changePass")
+    public String userConfPost(HttpServletRequest request){
+        String old = request.getParameter("oldpass");
+        String newpass = request.getParameter("newpass");
+
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        if(userService.changePassword(old, newpass, user)){
+            return "redirect:/userConf?success";
+        }
+        return "redirect:/userConf?error";
+    }
 
 }

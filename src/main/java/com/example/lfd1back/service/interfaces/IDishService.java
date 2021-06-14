@@ -8,4 +8,6 @@ public interface IDishService {
     public List<Dish> getAll();
 
     public Dish getOne(Long id);
+
+    public void add(Dish dish);
 }

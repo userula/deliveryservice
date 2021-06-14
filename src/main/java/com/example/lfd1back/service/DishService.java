@@ -26,5 +26,10 @@ public class DishService implements IDishService {
         return dishRepository.getOne(id);
     }
 
+    @Override
+    public void add(Dish dish) {
+        dishRepository.save(dish);
+    }
+
 
 }

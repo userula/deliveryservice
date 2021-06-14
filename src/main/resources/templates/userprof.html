@@ -13,8 +13,8 @@
 
 <nav class="navbar navbar-dark bg-dark justify-content-between" style="position: fixed; width: 100%; z-index: +1;">
     <div>
-        <a class="navbar-brand" href="#main">Delivery Service</a>
-        <a class="navbar-brand" href="localhost:8080/userProf"><span class="glyphicon glyphicon-btc"></span></a>
+        <a class="navbar-brand" href="/userprof">Delivery Service</a>
+        <a class="navbar-brand" href=""><span class="glyphicon glyphicon-btc"></span></a>
     </div>
     <form class="form-inline">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -22,7 +22,7 @@
     </form>
     <div>
         <a class="btn btn-warning" href="/cart/getAllDishesFromCart">Cart</a>
-<!--        <a class="btn btn-warning" href="#transferblock">Transfer</a>-->
+        <a class="btn btn-warning" href="/allrestaurants">Restaurants</a>
     </div>
     <div class="d-flex">
         <form action="/userConf" method="get">
@@ -68,22 +68,26 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10">
-                <h2 th:text="${session.user.email}"></h2>
-                <button id="createaccbtn" class="btn btn-info btn-outline-warning">Create form</button>
-                <!--                <button id="" class="btn btn-">Create form</button>-->
-                <hr>
-                <div th:if="${param.createsuccess}">
-                    <div class="alert alert-info">You've successfully added a new account!!!</div>
+                <h2>All Dishes</h2>
+
+                <div th:if="${session.user.role.role_id == 1}">
+                    <button id="createaccbtn" class="btn btn-info btn-outline-warning">Add dish</button>
                 </div>
 
+                <hr>
+
                 <div class="col-md-5 border border-success createacc" style="display: none;">
-                    <form action="/createAccount" method="post">
+                    <form action="/createDish" method="post">
                         <div class="m-5">
                             <input type="text" name="dishName" required placeholder="Enter dish name">
                             <hr>
                             <input type="text" name="dishPrice" required placeholder="Enter dish price">
+                            <hr>
+                            <select name="restaurant" id="restaurant">
+                                <option th:each="res, iter:${restaurants}" th:text="${res.id} + '-' + ${res.name}"></option>
+                            </select>
                             <h4></h4><br>
-                            <button class="btn btn-success" type="submit">Generate new Account</button>
+                            <button class="btn btn-success" type="submit">Add Dish</button>
                         </div>
                     </form>
                 </div>
@@ -95,8 +99,9 @@
 
                     <hr>
                     <h4 th:text="${pr.price}"></h4><br>
-
+                    <form action="/cart/addtocart" id="addtoc"></form>
                     <button class="btn btn-info addtocart" th:id="${pr.id}">Add to cart</button>
+                    <div id="res"></div>
                 </div>
             </div>
 
@@ -110,26 +115,17 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
+        $("#createaccbtn").on("click", function(){
+            $(".createacc").slideToggle();
+        });
+
         $(".addtocart").on("click", function (){
             event.preventDefault();
             var a = $( this ).attr("id");
-            var url = "http://localhost:8080/cart/addtocart";
-            var msgg = "msg" + a;
+            var url = $("#addtoc").attr("action") + '/' + a;
+            $("#res").load(url);
+            alert("Added");
 
-            $.ajax({
-                url: url,
-                type: 'GET',  // http method
-                data: 'id=' + a,
-                accepts: 'application/json; charset=utf-8',
-                //contentType: "application/json",
-                success: function (data) {
-                    alert("Added");
-                },
-                error: function (errorData, textStatus, errorMessage) {
-                    var msg = (errorData.responseJSON != null) ? errorData.responseJSON.errorMessage : '';
-                    $(msgg).text('Error: ' + msg + ', ' + errorData.status);
-                }
-            });
         });
 
     });

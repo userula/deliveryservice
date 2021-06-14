@@ -21,7 +21,7 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
     <div>
-        <a class="btn btn-warning" href="/cart">Cart</a>
+        <a class="btn btn-warning" href="/cart/getAllDishesFromCart">Cart</a>
         <a class="btn btn-warning" href="/allrestaurants">Restaurants</a>
     </div>
     <div class="d-flex">
@@ -68,8 +68,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10">
-                <h2 th:text="${session.user.email}"></h2>
+                <h2 th:text="${res.name}"></h2>
                 <hr>
+
             </div>
             <div class="col-md-4 border border-success" th:each="pr, iter:${dishes}">
                 <div class="m-5 p-3">
@@ -77,21 +78,38 @@
 
                     <hr>
                     <h4 th:text="${pr.price}"></h4><br>
-
+                    <form action="/cart/addtocart" id="addtoc"></form>
+                    <button class="btn btn-info addtocart" th:id="${pr.id}">Add to cart</button>
+                    <div id="res"></div>
                 </div>
             </div>
-        </div>
 
-        <div style="display: none">
-            <h3 th:text="${totalprice + ' tenge'}"></h3>
         </div>
-
     </div>
 </div>
 
-<br>
 
 <br>
 
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $("#createaccbtn").on("click", function(){
+            $(".createacc").slideToggle();
+        });
+
+        $(".addtocart").on("click", function (){
+            event.preventDefault();
+            var a = $( this ).attr("id");
+            var url = $("#addtoc").attr("action") + '/' + a;
+            $("#res").load(url);
+            alert("Added");
+
+        });
+
+    });
+
+
+</script>
 </body>
 </html>

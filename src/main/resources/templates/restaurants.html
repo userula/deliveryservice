@@ -21,7 +21,7 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
     <div>
-        <a class="btn btn-warning" href="/cart">Cart</a>
+        <a class="btn btn-warning" href="/cart/getAllDishesFromCart">Cart</a>
         <a class="btn btn-warning" href="/allrestaurants">Restaurants</a>
     </div>
     <div class="d-flex">
@@ -68,30 +68,68 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10">
-                <h2 th:text="${session.user.email}"></h2>
+                <h2>Restaurants</h2>
+
+                <div th:if="${session.user.role.role_id == 1}">
+                    <button id="createaccbtn" class="btn btn-info btn-outline-warning">Add Restaurant</button>
+                </div>
+
                 <hr>
+
+                <div class="col-md-5 border border-success createacc" style="display: none;">
+                    <form action="/createRestaurant" method="post">
+                        <div class="m-5">
+                            <input type="text" name="resName" required placeholder="Enter restaurant name">
+                            <hr>
+                            <input type="text" name="resLocation" required placeholder="Enter restaurant location">
+                            <hr>
+                            <h4></h4><br>
+                            <button class="btn btn-success" type="submit">Add</button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
-            <div class="col-md-4 border border-success" th:each="pr, iter:${dishes}">
+            <div class="col-md-4 border border-success" th:each="pr, iter:${restaurants}">
                 <div class="m-5 p-3">
                     <h3><strong th:text="${pr.id} + '-' + ${pr.name}"></strong></h3>
 
                     <hr>
-                    <h4 th:text="${pr.price}"></h4><br>
-
+                    <h4 th:text="${pr.location}"></h4><br>
+                    <form action="/showrestdishes" id="show">
+                        <input type="hidden" name="resnameforinp" th:value="${pr.id}">
+                        <button class="btn btn-info show" th:id="${pr.id}">Show dishes</button>
+                    </form>
+                    <div id="res"></div>
                 </div>
             </div>
-        </div>
 
-        <div style="display: none">
-            <h3 th:text="${totalprice + ' tenge'}"></h3>
         </div>
-
     </div>
 </div>
 
-<br>
 
 <br>
 
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $("#createaccbtn").on("click", function(){
+            $(".createacc").slideToggle();
+        });
+
+        // $(".addtocart").on("click", function (){
+        //     event.preventDefault();
+        //     var a = $( this ).attr("id");
+        //     var url = $("#addtoc").attr("action") + '/' + a;
+        //     $("#res").load(url);
+        //     alert("Added");
+        //
+        // });
+
+    });
+
+
+</script>
 </body>
 </html>

@@ -67,13 +67,24 @@ public class CartController {
         Cart c = cartService.getCart(u.getId());
 
         model.addAttribute("cart", c);
+        List<Dish> dishes = c.getDishes();
         model.addAttribute("dishes", c.getDishes());
+
+        int total = 0;
+
+        for (Dish d:
+             dishes) {
+            total += Integer.parseInt(d.getPrice());
+        }
+
+        model.addAttribute("totalprice", total);
 
         return "cart";
     }
 
-    @GetMapping("/addtocart")
-    public void addtocart(@RequestParam(name = "id") Long id, HttpSession session){
+
+    @GetMapping("/addtocart/{id}")
+    public void addtocart(@PathVariable(name = "id") Long id, HttpSession session){
         User u = (User) session.getAttribute("user");
 
         Cart c = cartService.getCart(u.getId());
